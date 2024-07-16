@@ -1,0 +1,5 @@
+export const INVITE_STATUS = {
+  PENDING: "PENDING",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
+} as const;

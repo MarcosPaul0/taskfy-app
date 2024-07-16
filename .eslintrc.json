@@ -1,3 +1,9 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": false
+  },
+  "rules": {
+    "jsx-quotes": ["error", "prefer-double"]
+  }
 }
