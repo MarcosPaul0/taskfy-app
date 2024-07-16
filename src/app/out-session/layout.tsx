@@ -8,8 +8,7 @@ export default function OutSessionLayout({
   return (
     <main
       className={`
-        flex flex-col h-full min-h-screen bg-neutral-950 
-        items-center
+        flex flex-col h-full min-h-screen items-center
       `}
     >
       <Header />

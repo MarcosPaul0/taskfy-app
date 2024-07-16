@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthContextProvider } from "@taskfy/contexts/AuthContext/authContext.context";
 import { Toaster } from "sonner";
-
+import NextTopLoader from 'nextjs-toploader';
 const inter = Inter({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
@@ -22,7 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-neutral-950`}>
+        <NextTopLoader
+          color="#10b981"
+          showSpinner={false}
+        />
+
         <AuthContextProvider>{children}</AuthContextProvider>
       </body>
 
