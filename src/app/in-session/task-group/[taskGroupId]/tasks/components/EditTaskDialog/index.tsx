@@ -1,6 +1,6 @@
 import { FloppyDisk, Trash } from "@phosphor-icons/react";
-import { Button } from "../../Button";
-import { DatePicker } from "../../DatePicker";
+import { Button } from "../../../../../../../components/Button";
+import { DatePicker } from "../../../../../../../components/DatePicker";
 import {
   Dialog,
   DialogContent,
@@ -8,18 +8,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../../Dialog";
-import { TextArea } from "../../TextArea";
-import { TextInput } from "../../TextInput";
+} from "../../../../../../../components/Dialog";
+import { TextArea } from "../../../../../../../components/TextArea";
+import { TextInput } from "../../../../../../../components/TextInput";
 import { TaskDialogProps } from "./taskDialogProps.interface";
-import { ParticipantCombobox } from "../../ParticipantCombobox";
-import { PointsCombobox } from "../../PointsCombobox";
+import { ParticipantCombobox } from "../../../../../../../components/ParticipantCombobox";
+import { PointsCombobox } from "../../../../../../../components/PointsCombobox";
 import { useForm } from "react-hook-form";
 import { EditTaskFormData } from "./interfaces/editTaskFormData.interface";
 import { API_ROUTES } from "@taskfy/routes/api.routes";
 import { apiClient } from "@taskfy/services/apiClient";
 import { queryClient } from "@taskfy/services/queryClient";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { TaskResponse } from "@taskfy/interfaces/responses/taskResponse.interface";
 import { useNotify } from "@taskfy/hooks/useNotify";
 import { useEffect } from "react";
@@ -29,6 +29,7 @@ import { useDialog } from "@taskfy/hooks/useDialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTaskGroupContext } from "@taskfy/contexts/TaskGroupContext/taskGroup.context";
+import { PageResponse } from "@taskfy/interfaces/responses/pageResponse.interface";
 
 const editTaskSchema = z.object({
   user: z.object({
@@ -69,6 +70,11 @@ export function EditTaskDialog({ handleClose, task }: TaskDialogProps) {
 
   const { errorNotify, successNotify } = useNotify();
 
+  const { get } = useSearchParams();
+
+  const page = get("page");
+  const taskSearch = get("task");
+
   const {
     isOpen: deleteTaskDialogIsOpen,
     open: handleOpenDeleteTaskDialog,
@@ -102,9 +108,10 @@ export function EditTaskDialog({ handleClose, task }: TaskDialogProps) {
       });
 
       queryClient.setQueryData(
-        ["tasks", taskGroupId],
-        (currentData: TaskResponse[]) => {
-          return currentData.map((currentTask) => {
+        ["tasks", taskGroupId, page, taskSearch],
+        (currentData: PageResponse<TaskResponse>) => ({
+          ...currentData,
+          content: currentData.content.map((currentTask) => {
             if (currentTask.id === task.id) {
               return {
                 ...currentTask,
@@ -113,8 +120,8 @@ export function EditTaskDialog({ handleClose, task }: TaskDialogProps) {
             }
 
             return currentTask;
-          });
-        },
+          }),
+        }),
       );
 
       handleClose();
@@ -122,7 +129,7 @@ export function EditTaskDialog({ handleClose, task }: TaskDialogProps) {
       successNotify({
         message: "Tarefa atualizada com sucesso",
       });
-    } catch {
+    } catch (error) {
       errorNotify({
         message: "Ocorreu algum erro ao atualizar a tarefa",
       });

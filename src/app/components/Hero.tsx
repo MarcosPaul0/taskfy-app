@@ -1,6 +1,6 @@
 import { ArrowBendUpRight } from "@phosphor-icons/react";
 import Image from "next/image";
-import { Button } from "../Button";
+import { Button } from "../../components/Button";
 import { useRouter } from "next/navigation";
 import { APP_ROUTES } from "@taskfy/routes/app.routes";
 

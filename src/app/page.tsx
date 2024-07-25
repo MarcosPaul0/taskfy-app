@@ -1,10 +1,10 @@
 "use client";
 
-import { Footer } from "@taskfy/components/landingPage/Footer";
-import { Functionalities } from "@taskfy/components/landingPage/Functionalities";
-import { Header } from "@taskfy/components/landingPage/Header";
-import { Hero } from "@taskfy/components/landingPage/Hero";
-import { Platform } from "@taskfy/components/landingPage/Platform";
+import { Footer } from "./components/Footer";
+import { Functionalities } from "./components/Functionalities";
+import { Header } from "@taskfy/app/components/Header";
+import { Hero } from "@taskfy/app/components/Hero";
+import { Platform } from "@taskfy/app/components/Platform";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({

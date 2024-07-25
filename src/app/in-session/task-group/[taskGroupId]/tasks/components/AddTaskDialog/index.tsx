@@ -1,6 +1,6 @@
 import { FloppyDisk, Trash } from "@phosphor-icons/react";
-import { Button } from "../../Button";
-import { DatePicker } from "../../DatePicker";
+import { Button } from "../../../../../../../components/Button";
+import { DatePicker } from "../../../../../../../components/DatePicker";
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../../Dialog";
-import { TextArea } from "../../TextArea";
-import { TextInput } from "../../TextInput";
+} from "../../../../../../../components/Dialog";
+import { TextArea } from "../../../../../../../components/TextArea";
+import { TextInput } from "../../../../../../../components/TextInput";
 import { TaskDialogProps } from "./taskDialogProps.interface";
-import { ParticipantCombobox } from "../../ParticipantCombobox";
-import { PointsCombobox } from "../../PointsCombobox";
+import { ParticipantCombobox } from "../../../../../../../components/ParticipantCombobox";
+import { PointsCombobox } from "../../../../../../../components/PointsCombobox";
 import { useForm } from "react-hook-form";
 import { AddTaskFormData } from "./interfaces/addTaskFormData.interface";
 import { useNotify } from "@taskfy/hooks/useNotify";
@@ -76,6 +76,7 @@ export function AddTaskDialog({
     setValue,
     clearErrors,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<AddTaskFormData>({
     resolver: zodResolver(registerTaskSchema),
@@ -106,6 +107,8 @@ export function AddTaskDialog({
       await refetchTasks();
 
       handleChangeIsOpen(false);
+
+      reset();
 
       successNotify({
         message: "Tarefa adicionada com sucesso",
