@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 import { PointsComboboxProps } from "./interfaces/pointsComboboxProps.interface";
-import { TaskPoints } from "../tasks/TaskPoints";
+import { TaskPoints } from "../../app/in-session/task-group/[taskGroupId]/tasks/components/TaskPoints";
 
 export const PointsCombobox = forwardRef<HTMLInputElement, PointsComboboxProps>(
   ({ helper, value, onChange, disabled }, ref) => {

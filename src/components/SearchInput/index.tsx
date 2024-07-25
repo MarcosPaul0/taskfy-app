@@ -1,47 +1,69 @@
+"use client";
+
 import { MagnifyingGlass } from "@phosphor-icons/react";
-import { useState } from "react";
 import { SearchInputProps } from "./interfaces/searchInputProps.interface";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Spinner } from "../Spinner";
 
 export function SearchInput(props: SearchInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
 
-  function handleFocus() {
-    setIsFocused(true);
+  const [search, setSearch] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleSearch(event: ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value);
   }
 
-  function handleBlur() {
-    setIsFocused(false);
-  }
+  useEffect(() => {
+    if (!search && isNaN(Number(search?.length))) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const delay = setTimeout(() => {
+      if (search?.length === 0) {
+        router.replace("?");
+      } else {
+        router.replace(`?${props.name}=${search}`);
+      }
+
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(delay);
+  }, [search]);
 
   return (
     <div
       className={`
-          flex items-center bg-neutral-800 min-w-80
-          h-10 pl-2 rounded-lg overflow-hidden border
-          ${isFocused ? "border-emerald-500" : "border-neutral-700"}
-        `}
+        flex items-center bg-neutral-800 min-w-80
+        h-10 rounded-lg overflow-hidden 
+        relative
+      `}
     >
       <input
         type="search"
         className={`
-          bg-transparent outline-none text-base
-          placeholder:text-gray-400 flex-1 text-gray-50
-        `}
+        bg-transparent outline-none text-base absolute border
+        placeholder:text-gray-400 flex-1 text-gray-50
+        left-0 top-0 border-neutral-700 focus:border-emerald-500
+        h-full w-full rounded-lg pl-2 pr-10
+      `}
         {...props}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onChange={handleSearch}
       />
 
-      <button
-        type="button"
+      <div
         className={`
-          text-gray-50 text-2xl h-full duration-200
-          hover:bg-neutral-700 p-2 active:bg-neutral-600
-          flex items-center justify-center
-        `}
+        text-gray-50 text-2xl h-full duration-200
+        p-2 flex items-center justify-center ml-auto
+      `}
       >
-        <MagnifyingGlass weight="bold" />
-      </button>
+        {isLoading ? <Spinner size="sm" /> : <MagnifyingGlass weight="bold" />}
+      </div>
     </div>
   );
 }

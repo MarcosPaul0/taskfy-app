@@ -13,7 +13,7 @@ import { KANBAN_ITEMS } from "./constants/kanbanItems.constant";
 import { TASK_STATUS } from "@taskfy/constants/taskStatus.constant";
 import { TaskStatus } from "@taskfy/types/taskStaus.type";
 import { TaskResponse } from "@taskfy/interfaces/responses/taskResponse.interface";
-import { TaskBoard } from "../tasks/TasksBoard";
+import { TaskBoard } from "../../app/in-session/task-group/[taskGroupId]/tasks/components/TasksBoard";
 
 const COLUMNS = [
   { id: TASK_STATUS.open, title: "Aberto" },

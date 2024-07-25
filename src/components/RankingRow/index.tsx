@@ -1,6 +1,6 @@
 import { Avatar } from "../Avatar";
 import { TableData } from "../Table";
-import { TaskPoints } from "../tasks/TaskPoints";
+import { TaskPoints } from "../../app/in-session/task-group/[taskGroupId]/tasks/components/TaskPoints";
 import { RankingRowProps } from "./interfaces/rankingRowProps.interface";
 
 export function RankingRow({

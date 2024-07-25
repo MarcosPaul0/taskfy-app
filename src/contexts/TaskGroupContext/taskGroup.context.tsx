@@ -1,3 +1,5 @@
+"use client"
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { TaskGroupContextData } from "./interfaces/taskGroupContextData.interface";
 import { TaskGroupContextProviderProps } from "./interfaces/taskGroupContextProviderProps.interface";
@@ -40,7 +42,6 @@ export function TaskGroupContextProvider({
 
   useEffect(() => {
     (async () => {
-      console.log("TESTESTES");
       if (!taskGroupId) {
         setTaskGroup(null);
         return;

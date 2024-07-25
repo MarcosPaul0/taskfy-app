@@ -82,7 +82,6 @@ export function RewardDialog({ reward, handleClose }: RewardDialogProps) {
         message: "Recompensa atualizada com sucesso",
       });
     } catch (error) {
-      console.log(error);
       errorNotify({
         message: "Ocorreu algum erro ao atualizar a recompensa",
       });
