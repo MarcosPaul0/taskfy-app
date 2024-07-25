@@ -3,5 +3,3 @@ export const BUTTON_SIZE = {
   md: "py-3 px-5 text-lg",
   lg: "py-4 px-6 text-xl",
 } as const;
-
-export type ButtonSize = keyof typeof BUTTON_SIZE;

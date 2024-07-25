@@ -26,7 +26,7 @@ export function Button({
       {...rest}
     >
       {isLoading ? (
-        <Spinner />
+        <Spinner size={size} />
       ) : (
         <>
           {leftIcon && <i className="text-2xl">{leftIcon}</i>}
