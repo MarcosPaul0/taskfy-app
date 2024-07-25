@@ -1,7 +1,5 @@
 "use client";
 
-import { Avatar } from "@taskfy/components/Avatar";
-import { BannerDropzone } from "@taskfy/components/BannerDropzone";
 import { Button } from "@taskfy/components/Button";
 import { Invite } from "@taskfy/components/Invite";
 import { Section } from "@taskfy/components/Section";

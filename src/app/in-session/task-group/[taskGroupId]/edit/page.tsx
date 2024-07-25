@@ -2,9 +2,8 @@
 
 import { Button } from "@taskfy/components/Button";
 import { Section } from "@taskfy/components/Section";
-import { Ranking, Trash } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
 import { useDialog } from "@taskfy/hooks/useDialog";
-import { DatePicker } from "@taskfy/components/DatePicker";
 import { EditTaskGroupSection } from "@taskfy/components/manageTaskGroup/EditTaskGroupSection";
 import { ManageTaskGroupRankingSection } from "@taskfy/components/manageTaskGroup/ManageTaskGroupRankingSection";
 import { DeleteTaskGroupDialog } from "@taskfy/components/taskGroup/DeleteTaskGroupDialog";

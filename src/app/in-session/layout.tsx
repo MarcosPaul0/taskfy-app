@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Header } from "@taskfy/components/inSession/Header";
+import { Header } from "@taskfy/components/Header";
 import { TaskGroupContextProvider } from "@taskfy/contexts/TaskGroupContext/taskGroup.context";
 import { queryClient } from "@taskfy/services/queryClient";
 

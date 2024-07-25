@@ -1,7 +1,6 @@
 "use client";
 
 import { Plus } from "@phosphor-icons/react";
-import { Button } from "@taskfy/components/Button";
 import {
   Carousel,
   CarouselContent,
@@ -9,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@taskfy/components/Carrousel";
-import { TaskGroupCard } from "@taskfy/components/tasks/TaskGroupCard";
+import { TaskGroupCard } from "@taskfy/app/in-session/task-group/[taskGroupId]/tasks/components/TaskGroupCard";
 import { Title } from "@taskfy/components/Title";
 import { Screen } from "@taskfy/components/Screen";
 import { APP_ROUTES } from "@taskfy/routes/app.routes";
@@ -19,6 +18,7 @@ import { apiClient } from "@taskfy/services/apiClient";
 import { API_ROUTES } from "@taskfy/routes/api.routes";
 import { TaskGroupResponse } from "@taskfy/interfaces/responses/taskGroupResponse.interface";
 import { TaskGroupsState } from "./interfaces/taskGroupsState.interface";
+import { ButtonLink } from "@taskfy/components/ButtonLink";
 
 export default function HomePage() {
   const router = useRouter();
@@ -27,10 +27,6 @@ export default function HomePage() {
     my: [],
     withParticipation: [],
   });
-
-  function redirectToNewTaskGroup() {
-    router.push(APP_ROUTES.NEW_TASK_GROUP);
-  }
 
   useEffect(() => {
     async function getMyGroups() {
@@ -77,13 +73,13 @@ export default function HomePage() {
   return (
     <Screen items="center" gap="md">
       <Title title="Meus Grupos">
-        <Button
+        <ButtonLink
           size="sm"
           text="Novo grupo"
           leftIcon={<Plus />}
           variant="outlined"
           width="fit"
-          onClick={redirectToNewTaskGroup}
+          href={APP_ROUTES.NEW_TASK_GROUP}
         />
       </Title>
 
@@ -96,23 +92,22 @@ export default function HomePage() {
           }}
         >
           <CarouselContent>
-            {taskGroups.my.map((taskGroup) => {
-              console.log(taskGroup.taskGroup.id)
-
-              return (
-                <CarouselItem
-                  className={`
+            {taskGroups.my.map((taskGroup) => (
+              <CarouselItem
+                className={`
                     pl-4 basis-1/1
                     lg:pl-5 lg:basis-1/2 
                     2xl:pl-11 2xl:basis-1/3
                     3xl:pl-4 3xl:basis-1/4
                   `}
+                key={taskGroup.taskGroup.id}
+              >
+                <TaskGroupCard
                   key={taskGroup.taskGroup.id}
-                >
-                  <TaskGroupCard key={taskGroup.taskGroup.id} taskGroupWithParticipants={taskGroup} />
-                </CarouselItem>
-              )
-            })}
+                  taskGroupWithParticipants={taskGroup}
+                />
+              </CarouselItem>
+            ))}
           </CarouselContent>
 
           <CarouselPrevious />
@@ -142,7 +137,10 @@ export default function HomePage() {
                   `}
                   key={taskGroup.taskGroup.id}
                 >
-                  <TaskGroupCard key={taskGroup.taskGroup.id} taskGroupWithParticipants={taskGroup} />
+                  <TaskGroupCard
+                    key={taskGroup.taskGroup.id}
+                    taskGroupWithParticipants={taskGroup}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>

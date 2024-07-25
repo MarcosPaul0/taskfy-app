@@ -1,23 +1,32 @@
 "use client";
 
 import { Kanban, ListChecks, Plus } from "@phosphor-icons/react";
-import { AddTaskDialog } from "@taskfy/components/tasks/AddTaskDialog";
+import { AddTaskDialog } from "@taskfy/app/in-session/task-group/[taskGroupId]/tasks/components/AddTaskDialog";
 import { Button } from "@taskfy/components/Button";
 import { KanbanBoard } from "@taskfy/components/KanbanBoard";
 import { SearchInput } from "@taskfy/components/SearchInput";
 import { Tab } from "@taskfy/components/Tab";
 import { TableHead } from "@taskfy/components/Table";
-import { TaskRow } from "@taskfy/components/tasks/TaskRow";
+import { TaskRow } from "@taskfy/app/in-session/task-group/[taskGroupId]/tasks/components/TaskRow";
 import { TaskResponse } from "@taskfy/interfaces/responses/taskResponse.interface";
 import { API_ROUTES } from "@taskfy/routes/api.routes";
 import { apiClient } from "@taskfy/services/apiClient";
 import { TaskTab } from "@taskfy/types/taskTab.type";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDialog } from "@taskfy/hooks/useDialog";
-import { EditTaskDialog } from "@taskfy/components/tasks/EditTaskDialog";
+import { EditTaskDialog } from "@taskfy/app/in-session/task-group/[taskGroupId]/tasks/components/EditTaskDialog";
 import { useTaskGroupContext } from "@taskfy/contexts/TaskGroupContext/taskGroup.context";
+import { PageResponse } from "@taskfy/interfaces/responses/pageResponse.interface";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "../../../../../../@/components/ui/pagination";
+import { usePagination } from "@taskfy/hooks/usePagination";
 
 export default function TaskGroupPage() {
   const { taskGroupId } = useParams();
@@ -42,20 +51,35 @@ export default function TaskGroupPage() {
     change: handleChangeAddTaskDialog,
   } = useDialog();
 
-  const { data: tasks, refetch } = useQuery<TaskResponse[]>({
-    queryKey: ["tasks", taskGroupId],
+  const { get } = useSearchParams();
+
+  const page = get("page");
+  const task = get("task");
+
+  const { data: tasks, refetch } = useQuery<PageResponse<TaskResponse> | null>({
+    queryKey: ["tasks", taskGroupId, page, task],
     queryFn: async () => {
       try {
-        const tasksResponse = await apiClient.get<TaskResponse[]>(
+        const tasksResponse = await apiClient.get<PageResponse<TaskResponse>>(
           `${API_ROUTES.FIND_TASKS_BY_GROUP}/${taskGroupId}`,
+          {
+            params: {
+              page: page ? page : "0",
+              title: Boolean(task && String(task).length > 0) ? task : "",
+            },
+          },
         );
 
         return tasksResponse.data;
       } catch {
-        return [];
+        return null;
       }
     },
-    initialData: [],
+    initialData: null,
+  });
+
+  const { nextPage, previousPage } = usePagination({
+    totalPages: tasks?.totalPages,
   });
 
   async function refetchTasks() {
@@ -97,7 +121,7 @@ export default function TaskGroupPage() {
         </div>
 
         <div className="flex items-center gap-4 pb-2">
-          <SearchInput placeholder="Buscar tarefa" />
+          <SearchInput name="task" placeholder="Buscar tarefa" />
 
           {isTaskGroupOwner && (
             <Button
@@ -112,27 +136,43 @@ export default function TaskGroupPage() {
       </div>
 
       {activeTab === "list" ? (
-        <table className="border-collapse">
-          <thead>
-            <tr>
-              <TableHead>Título</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Pontos</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Participantes</TableHead>
-            </tr>
-          </thead>
+        <>
+          <table className="border-collapse">
+            <thead>
+              <tr>
+                <TableHead>Título</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Pontos</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Participantes</TableHead>
+              </tr>
+            </thead>
 
-          <tbody>
-            {tasks.map((task) => (
-              <TaskRow
-                key={task.id}
-                task={task}
-                onClick={handleOpenEditTaskDialog}
-              />
-            ))}
-          </tbody>
-        </table>
+            <tbody>
+              {tasks?.content.map((task) => (
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  onClick={handleOpenEditTaskDialog}
+                />
+              ))}
+            </tbody>
+          </table>
+
+          {Boolean(tasks && tasks.totalPages > 1) && (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href={previousPage} />
+                </PaginationItem>
+
+                <PaginationItem>
+                  <PaginationNext href={nextPage} />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
+        </>
       ) : (
         <KanbanBoard />
       )}
