@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { NotifyParams } from "../interfaces/notifyParams.interface";
+import { NotifyParams } from "./interfaces/notifyParams.interface";
 import { useRouter } from "next/navigation";
 
 export function useNotify() {
